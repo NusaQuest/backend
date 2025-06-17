@@ -8,5 +8,5 @@ type AuthRequest struct {
 	Wallet		string					`json:"wallet"`
 	Message 	string					`json:"message"`
 	Signature	string					`json:"signature"`
-				
+
 }

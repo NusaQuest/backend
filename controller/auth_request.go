@@ -25,10 +25,10 @@ func ConnectWallet(c *fiber.Ctx) error {
 	collection := config.GetDatabase().Collection("auth_requests")
 	_, err = collection.InsertOne(ctx, req)
 	if err != nil {
-		return output.GetError(c, fiber.StatusBadRequest, string(constant.FailedToInsertData))
+		return output.GetError(c, fiber.StatusInternalServerError, string(constant.FailedToInsertData))
 	}
 
-	return output.GetSuccess(c, "", fiber.Map{
+	return output.GetSuccess(c, string(constant.SuccessPostData), fiber.Map{
 		"auth_request": req,
 	})
 
