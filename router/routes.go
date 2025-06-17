@@ -7,13 +7,15 @@ import (
 
 func SetUp(app *fiber.App) {
 
-	app.Post("/api/auth/requests", controller.ConnectWallet)
+	app.Post("/api/auth/wallet", controller.ConnectWallet)
 
-	app.Post("/api/transactions/add", controller.AddTransaction)
+	app.Delete("/api/auth/wallet/:wallet", controller.DisconnectWallet)
+
+	app.Post("/api/transactions", controller.AddTransaction)
 
 	app.Get("/api/transactions/:wallet", controller.GetTransactions)
 
-	app.Post("/api/destinations/add", controller.AddDestination)
+	app.Post("/api/destinations", controller.AddDestination)
 
 	app.Get("/api/destinations", controller.GetDestinations)
 

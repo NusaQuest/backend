@@ -29,7 +29,7 @@ func AddTransaction(c *fiber.Ctx) error {
 	}
 
 	return output.GetSuccess(c, string(constant.SuccessPostData), fiber.Map{
-		"transaction": "",
+		"transaction": transaction,
 	})
 
 }

@@ -9,6 +9,7 @@ const (
 	FailedToGenerateTokenAccess  		Error = "We couldn’t generate an access token. Please try again!"
 	FailedToDecodeData           		Error = "We couldn’t process the data. Please try again!"
 	FailedToRetrieveData         		Error = "There was an issue retrieving your data. Please try again!"
+	FailedToDeleteData           		Error = "We couldn’t delete the data. Please try again!"
 	InvalidAccountError          		Error = "The email or password entered is incorrect. Please try again!"
 	InvalidTokenError            		Error = "The token provided is invalid. Please try again!"
 	PermissionDeniedError        		Error = "Access denied! You don’t have permission to access this data."
