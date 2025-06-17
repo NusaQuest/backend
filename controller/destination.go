@@ -8,6 +8,7 @@ import (
 	"github.com/NusaQuest/backend.git/constant"
 	"github.com/NusaQuest/backend.git/model"
 	"github.com/NusaQuest/backend.git/output"
+	"github.com/NusaQuest/backend.git/utils"
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
 )
@@ -21,6 +22,11 @@ func AddDestination(c *fiber.Ctx) error {
 	err := c.BodyParser(&destination)
 	if err != nil {
 		return output.GetError(c, fiber.StatusBadRequest, string(constant.FailedToParseData))
+	}
+
+	err = utils.GetValidator().Struct(destination) 
+	if err != nil {
+		return output.GetError(c, fiber.StatusBadRequest, string(constant.ValidationError))
 	}
 
 	collection := config.GetDatabase().Collection("destinations")
