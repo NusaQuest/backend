@@ -1,22 +1,18 @@
 package router
 
 import (
-	"github.com/NusaQuest/backend.git/controller"
+	"github.com/NusaQuest/backend.git/controllers"
 	"github.com/gofiber/fiber/v2"
 )
 
 func SetUp(app *fiber.App) {
 
-	app.Post("/api/auth/wallet", controller.ConnectWallet)
+	app.Post("/api/transactions", controllers.AddTransaction)
 
-	app.Delete("/api/auth/wallet/:wallet", controller.DisconnectWallet)
+	app.Get("/api/transactions/:wallet", controllers.GetTransactions)
 
-	app.Post("/api/transactions", controller.AddTransaction)
+	app.Post("/api/destinations", controllers.AddDestination)
 
-	app.Get("/api/transactions/:wallet", controller.GetTransactions)
-
-	app.Post("/api/destinations", controller.AddDestination)
-
-	app.Get("/api/destinations", controller.GetDestinations)
+	app.Get("/api/destinations", controllers.GetDestinations)
 
 }
