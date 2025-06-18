@@ -4,15 +4,21 @@ import (
 	"log"
 
 	"github.com/NusaQuest/backend.git/config"
-	"github.com/NusaQuest/backend.git/middleware"
+	"github.com/NusaQuest/backend.git/handlers"
+	"github.com/NusaQuest/backend.git/middlewares"
 	"github.com/NusaQuest/backend.git/router"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/template/html/v2"
 )
 
 func main() {
 
-	app := fiber.New()
+	engine := html.New("./views", ".html")
+
+	app := fiber.New(fiber.Config{
+		Views: engine,
+	})
 
 	config.ConnectDatabase()
 
@@ -23,9 +29,11 @@ func main() {
 		AllowHeaders: "*",
 	}))
 
-	app.Use(middleware.CheckDBConnection)
+	app.Use(middlewares.CheckDBConnection)
 
 	router.SetUp(app)
+
+	app.Use(handlers.NotFound)
 
 	log.Fatal(app.Listen(":8080"))
 	
