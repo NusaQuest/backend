@@ -14,7 +14,7 @@ func AddProposal(c *fiber.Ctx) error {
 
 	var proposal models.Proposal
 
-	res, err := helper.InsertData(c, "proposals", proposal)
+	res, err := helper.InsertData(c, "proposals", &proposal)
 	if err != nil {
 		return output.GetError(c, fiber.StatusInternalServerError, err.Error())
 	}
@@ -35,7 +35,7 @@ func UpdateProposal(c *fiber.Ctx) error {
 
 	var proposal models.Proposal
 
-	res, err := helper.UpdateData(c, objId, proposal)
+	res, err := helper.UpdateData(c, objId, &proposal)
 	if err != nil {
 		return output.GetError(c, fiber.StatusInternalServerError, err.Error())
 	}
@@ -50,13 +50,13 @@ func GetProposals(c *fiber.Ctx) error {
 
 	var proposals []models.Proposal
 
-	res, err := helper.RetrieveData(bson.M{}, "proposals", proposals)
+	_, err := helper.RetrieveData(bson.M{}, "proposals", &proposals)
 	if err != nil {
 		return output.GetError(c, fiber.StatusInternalServerError, err.Error())
 	}
 
 	return output.GetSuccess(c, string(constants.SuccessGetMessage), fiber.Map{
-		"proposals": res,
+		"proposals": proposals,
 	})
 
 }
@@ -68,13 +68,13 @@ func GetWalletProposals(c *fiber.Ctx) error {
 	var proposals []models.Proposal
 	filter := bson.M{"wallet": wallet}
 
-	res, err := helper.RetrieveData(filter, "proposals", proposals)
+	_, err := helper.RetrieveData(filter, "proposals", &proposals)
 	if err != nil {
 		return output.GetError(c, fiber.StatusInternalServerError, err.Error())
 	}
 
 	return output.GetSuccess(c, string(constants.SuccessGetMessage), fiber.Map{
-		"proposals": res,
+		"proposals": proposals,
 	})
 
 }

@@ -13,7 +13,7 @@ func AddTransaction(c *fiber.Ctx) error {
 
 	var transaction models.Transaction
 
-	res, err := helper.InsertData(c, "transaction", transaction)
+	res, err := helper.InsertData(c, "transaction", &transaction)
 	if err != nil {
 		return output.GetError(c, fiber.StatusInternalServerError, err.Error())
 	}
@@ -31,13 +31,13 @@ func GetWalletTransactions(c *fiber.Ctx) error {
 	var transactions []models.Transaction
 	filter := bson.M{"wallet": wallet}
 
-	res, err := helper.RetrieveData(filter, "transactions", transactions)
+	_, err := helper.RetrieveData(filter, "transactions", &transactions)
 	if err != nil {
 		return output.GetError(c, fiber.StatusInternalServerError, err.Error())
 	}
 
 	return output.GetSuccess(c, string(constants.SuccessGetMessage), fiber.Map{
-		"transactions": res,
+		"transactions": transactions,
 	})
 
 }
