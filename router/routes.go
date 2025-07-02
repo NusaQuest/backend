@@ -12,10 +12,14 @@ func SetUp(app *fiber.App) {
 
 	app.Post("/api/transactions", controllers.AddTransaction)
 
-	app.Get("/api/transactions/:wallet", controllers.GetTransactions)
+	app.Get("/api/transactions/:wallet", controllers.GetWalletTransactions)
 
-	app.Post("/api/destinations", controllers.AddDestination)
+	app.Post("/api/proposals", controllers.AddProposal)
 
-	app.Get("/api/destinations", controllers.GetDestinations)
+	app.Patch("/api/proposals/:id", controllers.UpdateProposal)
+
+	app.Get("/api/proposals", controllers.GetProposals)
+
+	app.Get("/api/proposals/:wallet", controllers.GetWalletProposals)
 
 }

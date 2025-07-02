@@ -3,9 +3,8 @@ package constants
 type Success string
 
 const (
-
-	SuccessReturnData      Success = "Data retrieved successfully."
-	SuccessPostData        Success = "Data has been saved successfully."
-	SuccessDeleteData      Success = "Data has been deleted successfully."
-
+	SuccessGetMessage    Success = "Data successfully retrieved."
+	SuccessCreateMessage Success = "Data successfully created."
+	SuccessDeleteMessage Success = "Data successfully deleted."
+	SuccessUpdateMessage Success = "Data successfully updated."
 )

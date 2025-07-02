@@ -1,66 +1,43 @@
 package controllers
 
 import (
-	"context"
-	"time"
-
-	"github.com/NusaQuest/backend.git/config"
 	"github.com/NusaQuest/backend.git/constants"
+	"github.com/NusaQuest/backend.git/controllers/helper"
 	"github.com/NusaQuest/backend.git/models"
 	"github.com/NusaQuest/backend.git/output"
-	"github.com/NusaQuest/backend.git/utils"
 	"github.com/gofiber/fiber/v2"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 func AddTransaction(c *fiber.Ctx) error {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-
 	var transaction models.Transaction
-	err := c.BodyParser(&transaction)
+
+	res, err := helper.InsertData(c, "transaction", transaction)
 	if err != nil {
-		return output.GetError(c, fiber.StatusBadRequest, string(constants.FailedToParseData))
+		return output.GetError(c, fiber.StatusInternalServerError, err.Error())
 	}
 
-	err = utils.GetValidator().Struct(transaction) 
-	if err != nil {
-		return output.GetError(c, fiber.StatusBadRequest, string(constants.ValidationError))
-	}
-
-	collection := config.GetDatabase().Collection("transactions")
-	_, err = collection.InsertOne(ctx, &transaction)
-	if err != nil {
-		return output.GetError(c, fiber.StatusInternalServerError, string(constants.FailedToInsertData))
-	}
-
-	return output.GetSuccess(c, string(constants.SuccessPostData), fiber.Map{
-		"transaction": transaction,
+	return output.GetSuccess(c, string(constants.SuccessCreateMessage), fiber.Map{
+		"result": res,
 	})
 
 }
 
-func GetTransactions(c *fiber.Ctx) error {
+func GetWalletTransactions(c *fiber.Ctx) error {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
+	wallet := c.Params("wallet")
 
 	var transactions []models.Transaction
+	filter := bson.M{"wallet": wallet}
 
-	collection := config.GetDatabase().Collection("transactions")
-	cursor, err := collection.Find(ctx, fiber.Map{})
+	res, err := helper.RetrieveData(filter, "transactions", transactions)
 	if err != nil {
-		return output.GetError(c, fiber.StatusInternalServerError, string(constants.FailedToRetrieveData))
-	}
-	defer cursor.Close(ctx)
-
-	err = cursor.All(ctx, &transactions)
-	if err != nil {
-		return output.GetError(c, fiber.StatusInternalServerError, string(constants.FailedToDecodeData))
+		return output.GetError(c, fiber.StatusInternalServerError, err.Error())
 	}
 
-	return output.GetSuccess(c, string(constants.SuccessReturnData), fiber.Map{
-		"transactions": transactions,
+	return output.GetSuccess(c, string(constants.SuccessGetMessage), fiber.Map{
+		"transactions": res,
 	})
 
 }

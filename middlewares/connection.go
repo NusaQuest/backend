@@ -10,7 +10,7 @@ import (
 )
 
 func CheckDBConnection(c *fiber.Ctx) error {
-	
+
 	if config.Client == nil {
 		return output.GetError(c, fiber.StatusInternalServerError, string(constants.DatabaseNotInitialized))
 	}
@@ -19,7 +19,7 @@ func CheckDBConnection(c *fiber.Ctx) error {
 	if err != nil {
 		return output.GetError(c, fiber.StatusInternalServerError, string(constants.ErrorWhilePingToDatabase))
 	}
-	
+
 	return c.Next()
 
 }
