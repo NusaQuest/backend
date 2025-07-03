@@ -9,6 +9,10 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+// CheckDBConnection is a middleware to validate MongoDB connection status.
+// @notice Ensures the MongoDB client is initialized and reachable before proceeding.
+// @param c Fiber context for the current HTTP request.
+// @return Proceeds to the next middleware/handler if connected, or returns 500 error if not.
 func CheckDBConnection(c *fiber.Ctx) error {
 
 	if config.Client == nil {
@@ -21,5 +25,4 @@ func CheckDBConnection(c *fiber.Ctx) error {
 	}
 
 	return c.Next()
-
 }

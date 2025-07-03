@@ -9,6 +9,10 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
+// AddTransaction handles POST /transactions
+// @notice Adds a new transaction to the database.
+// @param c Fiber context containing the request body.
+// @return JSON response with insert result or error.
 func AddTransaction(c *fiber.Ctx) error {
 
 	var transaction models.Transaction
@@ -24,6 +28,10 @@ func AddTransaction(c *fiber.Ctx) error {
 
 }
 
+// GetWalletTransactions handles GET /transactions/:wallet
+// @notice Retrieves transactions based on wallet address.
+// @param c Fiber context with the wallet parameter.
+// @return JSON response with the list of transactions or error.
 func GetWalletTransactions(c *fiber.Ctx) error {
 
 	wallet := c.Params("wallet")
