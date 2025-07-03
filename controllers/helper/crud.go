@@ -24,7 +24,7 @@ func RetrieveData(filter bson.M, doc string, obj interface{}) (interface{}, erro
 	}
 	defer cursor.Close(ctx)
 
-	err = cursor.All(ctx, &obj)
+	err = cursor.All(ctx, obj)
 	if err != nil {
 		return nil, err
 	}
@@ -38,7 +38,7 @@ func InsertData(c *fiber.Ctx, doc string, obj interface{}) (*mongo.InsertOneResu
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	err := c.BodyParser(&obj)
+	err := c.BodyParser(obj)
 	if err != nil {
 		return nil, err
 	}
@@ -58,17 +58,17 @@ func InsertData(c *fiber.Ctx, doc string, obj interface{}) (*mongo.InsertOneResu
 
 }
 
-func UpdateData(c *fiber.Ctx, id primitive.ObjectID, obj interface{}) (*mongo.UpdateResult, error) {
+func UpdateData(c *fiber.Ctx, doc string, id primitive.ObjectID, obj interface{}) (*mongo.UpdateResult, error) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	err := c.BodyParser(&obj)
+	err := c.BodyParser(obj)
 	if err != nil {
 		return nil, err
 	}
 
-	collection := config.GetDatabase().Collection("proposals")
+	collection := config.GetDatabase().Collection(doc)
 	filter := bson.M{"_id": id}
 	update := bson.M{"$set": obj}
 

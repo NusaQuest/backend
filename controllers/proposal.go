@@ -14,7 +14,7 @@ func AddProposal(c *fiber.Ctx) error {
 
 	var proposal models.Proposal
 
-	res, err := helper.InsertData(c, "proposals", &proposal)
+	res, err := helper.InsertData(c, string(constants.Proposals), &proposal)
 	if err != nil {
 		return output.GetError(c, fiber.StatusInternalServerError, err.Error())
 	}
@@ -35,7 +35,7 @@ func UpdateProposal(c *fiber.Ctx) error {
 
 	var proposal models.Proposal
 
-	res, err := helper.UpdateData(c, objId, &proposal)
+	res, err := helper.UpdateData(c, string(constants.Proposals), objId, &proposal)
 	if err != nil {
 		return output.GetError(c, fiber.StatusInternalServerError, err.Error())
 	}
@@ -50,7 +50,7 @@ func GetProposals(c *fiber.Ctx) error {
 
 	var proposals []models.Proposal
 
-	_, err := helper.RetrieveData(bson.M{}, "proposals", &proposals)
+	_, err := helper.RetrieveData(bson.M{}, string(constants.Proposals), &proposals)
 	if err != nil {
 		return output.GetError(c, fiber.StatusInternalServerError, err.Error())
 	}
@@ -68,7 +68,7 @@ func GetWalletProposals(c *fiber.Ctx) error {
 	var proposals []models.Proposal
 	filter := bson.M{"wallet": wallet}
 
-	_, err := helper.RetrieveData(filter, "proposals", &proposals)
+	_, err := helper.RetrieveData(filter, string(constants.Proposals), &proposals)
 	if err != nil {
 		return output.GetError(c, fiber.StatusInternalServerError, err.Error())
 	}
