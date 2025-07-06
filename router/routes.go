@@ -14,6 +14,12 @@ func SetUp(app *fiber.App) {
 	// @notice Root route to check if the server is running
 	app.Get("/", handlers.Welcome)
 
+	// @notice Add a new identity entry
+	app.Post("/api/identities", controllers.RegisterIdentity)
+
+	// @notice Get identity submitted by a specific wallet
+	app.Get("/api/identities/:wallet", controllers.GetIdentity)
+
 	// @notice Add a new transaction entry
 	app.Post("/api/transactions", controllers.AddTransaction)
 
