@@ -12,4 +12,8 @@ const (
 	// @notice Error returned when the application fails to ping the MongoDB server.
 	// @dev Can be caused by network issues, incorrect URI, or MongoDB server not running.
 	ErrorWhilePingToDatabase Error = "Unable to reach the MongoDB database. Please ensure it is running and accessible."
+
+	// @notice Error returned when no identity is found for a given wallet address.
+	// @dev Ensure the wallet has previously registered via the KTP registration process.
+	IdentityNotFound Error = "No identity found for this wallet. Please register your KTP to continue."
 )
