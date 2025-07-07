@@ -9,7 +9,7 @@ const (
 	Proposals Document = "proposals"
 
 	// @notice The MongoDB collection name for storing transaction data.
-	Transactions Document = "transactions" 
+	Transactions Document = "transactions"
 
 	// @notice The MongoDB collection name for storing identity data.
 	Identities Document = "identities"

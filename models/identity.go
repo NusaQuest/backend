@@ -17,4 +17,3 @@ type Identity struct {
 	// @notice Unix timestamp when the KTP registration was completed
 	RegisteredAt int64 `json:"registeredAt" validate:"required"`
 }
-

@@ -14,6 +14,7 @@ import (
 // @param c Fiber context containing the identity data in the request body.
 // @return JSON response with insert result or error.
 func RegisterIdentity(c *fiber.Ctx) error {
+
 	var identity models.Identity
 
 	res, err := helper.InsertData(c, string(constants.Identities), &identity)
@@ -22,8 +23,9 @@ func RegisterIdentity(c *fiber.Ctx) error {
 	}
 
 	return output.GetSuccess(c, string(constants.SuccessCreateMessage), fiber.Map{
-		"result": res,
+		"result": res.InsertedID,
 	})
+
 }
 
 // GetIdentity handles GET api/identities/:wallet
@@ -31,6 +33,7 @@ func RegisterIdentity(c *fiber.Ctx) error {
 // @param c Fiber context with the wallet parameter.
 // @return JSON response with the identity data or error.
 func GetIdentity(c *fiber.Ctx) error {
+
 	wallet := c.Params("wallet")
 
 	var identites []models.Identity
@@ -48,4 +51,5 @@ func GetIdentity(c *fiber.Ctx) error {
 	return output.GetSuccess(c, string(constants.SuccessGetMessage), fiber.Map{
 		"identity": identites[0],
 	})
+
 }

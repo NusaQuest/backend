@@ -23,7 +23,7 @@ func AddTransaction(c *fiber.Ctx) error {
 	}
 
 	return output.GetSuccess(c, string(constants.SuccessCreateMessage), fiber.Map{
-		"result": res,
+		"result": res.InsertedID,
 	})
 
 }

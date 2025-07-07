@@ -8,7 +8,6 @@ import (
 	"github.com/NusaQuest/backend.git/utils"
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -77,7 +76,7 @@ func InsertData(c *fiber.Ctx, doc string, obj interface{}) (*mongo.InsertOneResu
 // @param id - The ObjectID of the document to update.
 // @param obj - The object containing updated fields.
 // @return The result of the update operation and an error if occurred.
-func UpdateData(c *fiber.Ctx, doc string, id primitive.ObjectID, obj interface{}) (*mongo.UpdateResult, error) {
+func UpdateData(c *fiber.Ctx, doc string, key string, value interface{}, obj interface{}) (*mongo.UpdateResult, error) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -88,7 +87,7 @@ func UpdateData(c *fiber.Ctx, doc string, id primitive.ObjectID, obj interface{}
 	}
 
 	collection := config.GetDatabase().Collection(doc)
-	filter := bson.M{"_id": id}
+	filter := bson.M{key: value}
 	update := bson.M{"$set": obj}
 
 	res, err := collection.UpdateOne(ctx, filter, update)
