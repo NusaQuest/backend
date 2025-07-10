@@ -18,8 +18,8 @@ type Transaction struct {
 	Detail string `json:"detail" validate:"required"`
 
 	// @notice Hash of the transaction recorded on blockchain
-	TxHash string `json:"txHash" validate:"required"`
+	TxHash string `json:"txhash" validate:"required"`
 
 	// @notice Unix timestamp when the transaction occurred
-	TxTimestamp uint64 `json:"txTimestamp" validate:"required"`
+	TxTimestamp uint64 `json:"txtimestamp" validate:"required"`
 }

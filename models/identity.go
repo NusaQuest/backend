@@ -15,5 +15,5 @@ type Identity struct {
 	Hash string `json:"hash" validate:"required"`
 
 	// @notice Unix timestamp when the KTP registration was completed
-	RegisteredAt int64 `json:"registeredAt" validate:"required"`
+	RegisteredAt int64 `json:"registeredat" validate:"required"`
 }

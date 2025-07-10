@@ -8,28 +8,28 @@ type Proposal struct {
 	Id primitive.ObjectID `json:"id" bson:"_id,omitempty"`
 
 	// @notice Smart contract proposal ID (on-chain)
-	ScId int64 `json:"scId"`
+	ScId int64 `json:"scid"`
 
 	// @notice List of contract addresses targeted by the proposal actions
-	ScTargets []string `json:"scTargets"`
+	ScTargets []string `json:"sctargets"`
 
 	// @notice ETH values sent with each contract call
-	ScValues []int64 `json:"scValues"`
+	ScValues []int64 `json:"scvalues"`
 
 	// @notice Encoded function calldata for each action
-	ScCalldatas []string `json:"scCalldatas"`
+	ScCalldatas []string `json:"sccalldatas"`
 
 	// @notice Wallet address of the proposal creator
 	Wallet string `json:"wallet"`
 
 	// @notice Title or name of the proposal
-	ProposalName string `json:"name" validate:"required"`
+	ProposalName string `json:"proposalname" validate:"required"`
 
 	// @notice Short description of the proposal with validation
-	ProposalDescription string `json:"proposalDescription" validate:"required,min=8,max=256"`
+	ProposalDescription string `json:"proposaldescription" validate:"required,min=8,max=256"`
 
 	// @notice Name of the beach to be cleaned
-	BeachName string `json:"beachName" validate:"required"`
+	BeachName string `json:"beachname" validate:"required"`
 
 	// @notice City where the beach is located
 	City string `json:"city" validate:"required"`

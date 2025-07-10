@@ -44,14 +44,17 @@ func UpdateProposal(c *fiber.Ctx) error {
 
 	var proposal models.Proposal
 
-	res, err := helper.UpdateData(c, string(constants.Proposals), "_id", objId, &proposal)
+	err = c.BodyParser(&proposal)
+	if err != nil {
+		return output.GetError(c, fiber.StatusBadRequest, err.Error())
+	}
+
+	_, err = helper.UpdateData(c, string(constants.Proposals), "_id", objId, &proposal)
 	if err != nil {
 		return output.GetError(c, fiber.StatusInternalServerError, err.Error())
 	}
 
-	return output.GetSuccess(c, string(constants.SuccessUpdateMessage), fiber.Map{
-		"result": res.UpsertedID,
-	})
+	return output.GetSuccess(c, string(constants.SuccessUpdateMessage), fiber.Map{})
 
 }
 

@@ -81,11 +81,6 @@ func UpdateData(c *fiber.Ctx, doc string, key string, value interface{}, obj int
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	err := c.BodyParser(obj)
-	if err != nil {
-		return nil, err
-	}
-
 	collection := config.GetDatabase().Collection(doc)
 	filter := bson.M{key: value}
 	update := bson.M{"$set": obj}
