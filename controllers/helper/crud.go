@@ -70,7 +70,7 @@ func InsertData(c *fiber.Ctx, doc string, obj interface{}) (*mongo.InsertOneResu
 }
 
 // @notice Update an existing document in a MongoDB collection by ID.
-// @dev Parses the request body and updates fields with $set operator.
+// @dev Updates fields with $set operator.
 // @param c - Fiber context to parse the request body.
 // @param doc - The name of the MongoDB collection.
 // @param id - The ObjectID of the document to update.
