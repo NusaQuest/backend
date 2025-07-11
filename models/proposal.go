@@ -11,16 +11,16 @@ type Proposal struct {
 	ScId int64 `json:"scid"`
 
 	// @notice List of contract addresses targeted by the proposal actions
-	ScTargets []string `json:"sctargets"`
+	ScTargets []string `json:"sctargets" validate:"required"`
 
 	// @notice ETH values sent with each contract call
-	ScValues []int64 `json:"scvalues"`
+	ScValues []int64 `json:"scvalues" validate:"required"`
 
 	// @notice Encoded function calldata for each action
-	ScCalldatas []string `json:"sccalldatas"`
+	ScCalldatas []string `json:"sccalldatas" validate:"required"`
 
 	// @notice Wallet address of the proposal creator
-	Wallet string `json:"wallet"`
+	Wallet string `json:"wallet" validate:"required"`
 
 	// @notice Title or name of the proposal
 	ProposalName string `json:"proposalname" validate:"required"`
