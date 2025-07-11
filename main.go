@@ -10,6 +10,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/template/html/v2"
+	"github.com/joho/godotenv"
 )
 
 // @notice Entry point of the NusaQuest backend application.
@@ -34,6 +35,13 @@ func main() {
 		AllowOrigins: "*",
 		AllowHeaders: "*",
 	}))
+
+	// @notice Load environment variables from .env file into runtime
+	// @dev Used to configure secrets, database URL, and other env-specific values
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatalf("Cannot load .env! %s", err)
+	}
 
 	// @notice Middleware to check database connection on each request
 	app.Use(middlewares.CheckDBConnection)

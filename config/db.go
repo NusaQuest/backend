@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -20,12 +19,8 @@ var Client *mongo.Client
 // @return *mongo.Database - The active database connection
 func GetDatabase() *mongo.Database {
 
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatalf("Cannot load .env! %s", err)
-	}
-
 	DB_NAME := os.Getenv("DB_NAME")
+
 	return Client.Database(DB_NAME)
 
 }
@@ -36,18 +31,15 @@ func GetDatabase() *mongo.Database {
 // @return void - Logs a fatal error and exits if the connection fails
 func ConnectDatabase() {
 
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatalf("Cannot load .env! %s", err)
-	}
-
 	MONGO_URI := os.Getenv("MONGO_URI")
 	clientOption := options.Client().ApplyURI(MONGO_URI)
 
-	Client, err = mongo.Connect(context.Background(), clientOption)
+	client, err := mongo.Connect(context.Background(), clientOption)
 	if err != nil {
 		log.Fatalf("Error while connect to MongoDB!")
 	}
+
+	Client = client
 
 	log.Println("Successfully connected to MongoDB!")
 
