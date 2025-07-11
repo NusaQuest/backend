@@ -1,6 +1,8 @@
 package utils
 
-import "github.com/go-playground/validator/v10"
+import (
+	"github.com/go-playground/validator/v10"
+)
 
 // @notice Initializes and returns a new instance of the validator.
 // @dev Uses go-playground/validator.v10 for struct validation.
