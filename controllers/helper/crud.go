@@ -39,7 +39,7 @@ func RetrieveData(filter bson.M, doc string, obj interface{}) (interface{}, erro
 }
 
 // @notice Insert a new document into a MongoDB collection.
-// @dev Parses the request body, validates the struct, and inserts it.
+// @dev Validates the struct, and inserts it.
 // @param c - Fiber context to parse the request body.
 // @param doc - The name of the MongoDB collection.
 // @param obj - The object to insert.
@@ -49,12 +49,7 @@ func InsertData(c *fiber.Ctx, doc string, obj interface{}) (*mongo.InsertOneResu
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	err := c.BodyParser(obj)
-	if err != nil {
-		return nil, err
-	}
-
-	err = utils.GetValidator().Struct(obj)
+	err := utils.GetValidator().Struct(obj)
 	if err != nil {
 		return nil, err
 	}

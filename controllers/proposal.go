@@ -18,6 +18,11 @@ func AddProposal(c *fiber.Ctx) error {
 
 	var proposal models.Proposal
 
+	err := c.BodyParser(&proposal)
+	if err != nil {
+		return output.GetError(c, fiber.StatusBadRequest, err.Error())
+	}
+
 	res, err := helper.InsertData(c, string(constants.Proposals), &proposal)
 	if err != nil {
 		return output.GetError(c, fiber.StatusInternalServerError, err.Error())

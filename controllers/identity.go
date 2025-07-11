@@ -17,6 +17,11 @@ func RegisterIdentity(c *fiber.Ctx) error {
 
 	var identity models.Identity
 
+	err := c.BodyParser(&identity)
+	if err != nil {
+		return output.GetError(c, fiber.StatusBadRequest, err.Error())
+	}
+
 	res, err := helper.InsertData(c, string(constants.Identities), &identity)
 	if err != nil {
 		return output.GetError(c, fiber.StatusInternalServerError, err.Error())

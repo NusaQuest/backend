@@ -18,6 +18,11 @@ func AddNFT(c *fiber.Ctx) error {
 
 	var nft models.NFT
 
+	err := c.BodyParser(&nft)
+	if err != nil {
+		return output.GetError(c, fiber.StatusBadRequest, err.Error())
+	}
+
 	res, err := helper.InsertData(c, string(constants.NFTs), &nft)
 	if err != nil {
 		return output.GetError(c, fiber.StatusInternalServerError, err.Error())

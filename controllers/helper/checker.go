@@ -39,6 +39,7 @@ func CheckProposalInput(proposalName string, proposalDescription string, beachNa
 	if err != nil {
 		return "", err
 	}
+	fmt.Println(chatCompletion)
 
 	return chatCompletion.Choices[0].Message.Content, nil
 
