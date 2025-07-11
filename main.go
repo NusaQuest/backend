@@ -24,6 +24,13 @@ func main() {
 		Views: engine,
 	})
 
+	// @notice Load environment variables from .env file into runtime
+	// @dev Used to configure secrets, database URL, and other env-specific values
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatalf("Cannot load .env! %s", err)
+	}
+
 	// @notice Connect to MongoDB using configuration
 	config.ConnectDatabase()
 
@@ -35,13 +42,6 @@ func main() {
 		AllowOrigins: "*",
 		AllowHeaders: "*",
 	}))
-
-	// @notice Load environment variables from .env file into runtime
-	// @dev Used to configure secrets, database URL, and other env-specific values
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatalf("Cannot load .env! %s", err)
-	}
 
 	// @notice Middleware to check database connection on each request
 	app.Use(middlewares.CheckDBConnection)

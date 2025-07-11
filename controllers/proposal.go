@@ -11,7 +11,8 @@ import (
 )
 
 // AddProposal handles POST api/proposals
-// @notice Adds a new proposal to the database.
+// @notice Adds a new proposal to the database with AI-based validation.
+// @dev Parses request body, uses OpenAI to validate location and description context, inserts if valid.
 // @param c Fiber context containing the request body.
 // @return JSON response with insert result or error.
 func AddProposal(c *fiber.Ctx) error {
@@ -23,19 +24,29 @@ func AddProposal(c *fiber.Ctx) error {
 		return output.GetError(c, fiber.StatusBadRequest, err.Error())
 	}
 
+	valid, err := helper.CheckProposalInput(proposal.ProposalName, proposal.ProposalDescription, proposal.BeachName, proposal.City, proposal.Province)
+	if err != nil {
+		return output.GetError(c, fiber.StatusBadRequest, err.Error())
+	}
+
+	if !valid {
+		return output.GetError(c, fiber.StatusBadRequest, string(constants.ProposalValidationFailed))
+	}
+
 	res, err := helper.InsertData(c, string(constants.Proposals), &proposal)
 	if err != nil {
 		return output.GetError(c, fiber.StatusInternalServerError, err.Error())
 	}
 
 	return output.GetSuccess(c, string(constants.SuccessCreateMessage), fiber.Map{
-		"result": res,
+		"result": res.InsertedID,
 	})
 
 }
 
 // UpdateProposal handles PUT/PATCH api/proposals/:id
-// @notice Updates an existing proposal by its ID.
+// @notice Updates an existing proposal by its ID with AI-based validation..
+// @dev Parses request body, uses OpenAI to validate location and description context, updates if valid.
 // @param c Fiber context with the proposal ID and body.
 // @return JSON response with update result or error.
 func UpdateProposal(c *fiber.Ctx) error {
@@ -52,6 +63,15 @@ func UpdateProposal(c *fiber.Ctx) error {
 	err = c.BodyParser(&proposal)
 	if err != nil {
 		return output.GetError(c, fiber.StatusBadRequest, err.Error())
+	}
+
+	valid, err := helper.CheckProposalInput(proposal.ProposalName, proposal.ProposalDescription, proposal.BeachName, proposal.City, proposal.Province)
+	if err != nil {
+		return output.GetError(c, fiber.StatusBadRequest, err.Error())
+	}
+
+	if !valid {
+		return output.GetError(c, fiber.StatusBadRequest, string(constants.ProposalValidationFailed))
 	}
 
 	_, err = helper.UpdateData(c, string(constants.Proposals), "_id", objId, &proposal)

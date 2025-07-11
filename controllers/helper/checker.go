@@ -4,27 +4,42 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/openai/openai-go"
 	"github.com/openai/openai-go/option"
 )
 
-func CheckProposalInput(proposalName string, proposalDescription string, beachName string, city string, province string) (string, error) {
+// CheckProposalInput validates a beach cleanup proposal using OpenAI's language model.
+// @notice Checks if the provided beach name and location are valid, and if the proposal content is related to beach cleanup.
+// @dev Sends a structured prompt to OpenAI and parses the JSON response for UI-friendly validation feedback.
+// @param proposalName The title of the proposed beach cleanup.
+// @param proposalDescription The detailed explanation of the proposed activity.
+// @param beachName The name of the beach to be cleaned.
+// @param city The city where the beach is located.
+// @param province The province where the beach is located.
+// @return bool Indicates whether the proposal is valid.
+// @return error Any error encountered during the API call or JSON parsing.
+func CheckProposalInput(proposalName string, proposalDescription string, beachName string, city string, province string) (bool, error) {
 
 	question := fmt.Sprintf(`
-		Please check the following input and answer clearly and concisely:
-			1. Is there a beach named "%s" located in the city of "%s", province of "%s", Indonesia?
-			2. Does the proposal description below indicate a beach cleanup activity?
-				Proposal Name: %s
-				Proposal Description: %s
-				
-		Reply in this JSON format:
-			{
-				"valid": true or false,
-				"reason": "brief explanation"
-			}			
-		`,
-		beachName, city, province, proposalName, proposalDescription)
+		You are validating a beach cleanup proposal in Indonesia. Analyze the following:
+
+			- Claimed beach: "%s"
+			- City: "%s"
+			- Province: "%s"
+			- Proposal Name: "%s"
+			- Description: "%s"
+
+		Determine if BOTH conditions are met:
+			1. The location refers to a real beach in Indonesia (not mountains or non-coastal areas).
+			2. The proposal clearly describes a beach cleanup (not forest, mountain, or general environmental action).
+
+		If BOTH are clearly true, reply only: true  
+		If either one is false or unclear, reply only: false  
+
+		⚠️ Reply with only: true or false — no explanations or extra words.
+		`, beachName, city, province, proposalName, proposalDescription)
 
 	OPENAI_API_KEY := os.Getenv("OPENAI_API_KEY")
 
@@ -37,10 +52,14 @@ func CheckProposalInput(proposalName string, proposalDescription string, beachNa
 		Model: openai.ChatModelGPT3_5Turbo,
 	})
 	if err != nil {
-		return "", err
+		return false, err
 	}
-	fmt.Println(chatCompletion)
 
-	return chatCompletion.Choices[0].Message.Content, nil
+	boolean, err := strconv.ParseBool(chatCompletion.Choices[0].Message.Content)
+	if err != nil {
+		return false, err
+	}
+
+	return boolean, nil
 
 }

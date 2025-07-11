@@ -16,4 +16,8 @@ const (
 	// @notice Error returned when no identity is found for a given wallet address.
 	// @dev Ensure the wallet has previously registered via the KTP registration process.
 	IdentityNotFound Error = "No identity found for this wallet. Please register your KTP to continue."
+
+	// @notice Error returned when a proposal fails AI validation (e.g. not a beach cleanup or invalid location).
+	// @dev The proposal name/description/location did not match criteria for a valid beach cleanup initiative.
+	ProposalValidationFailed Error = "Proposal input is not valid. Make sure the location exists and the activity clearly describes a beach cleanup."
 )

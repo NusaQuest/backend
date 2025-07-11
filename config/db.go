@@ -36,6 +36,7 @@ func ConnectDatabase() {
 
 	client, err := mongo.Connect(context.Background(), clientOption)
 	if err != nil {
+		log.Println(err)
 		log.Fatalf("Error while connect to MongoDB!")
 	}
 
