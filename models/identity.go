@@ -11,9 +11,6 @@ type Identity struct {
 	// @notice Wallet address that completed the KTP registration
 	Wallet string `json:"wallet" validate:"required"`
 
-	// @notice Hash of the user's KTP data (OCR result)
-	Hash string `json:"hash" validate:"required"`
-
 	// @notice Unix timestamp when the KTP registration was completed
 	RegisteredAt int64 `json:"registeredat" validate:"required"`
 }

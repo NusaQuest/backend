@@ -35,9 +35,6 @@ func SetUp(app *fiber.App) {
 	// @notice Get all proposals
 	app.Get("/api/proposals", controllers.GetProposals)
 
-	// @notice Get all proposals submitted by a specific wallet
-	app.Get("/api/proposals/:wallet", controllers.GetWalletProposals)
-
 	// @notice Add a new nft entry
 	app.Post("/api/nfts", controllers.AddNFT)
 

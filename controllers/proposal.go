@@ -100,25 +100,3 @@ func GetProposals(c *fiber.Ctx) error {
 	})
 
 }
-
-// GetWalletProposals handles GET api/proposals/:wallet
-// @notice Retrieves proposals associated with a specific wallet address.
-// @param c Fiber context with the wallet parameter.
-// @return JSON response with filtered proposals or error.
-func GetWalletProposals(c *fiber.Ctx) error {
-
-	wallet := c.Params("wallet")
-
-	var proposals []models.Proposal
-	filter := bson.M{"wallet": wallet}
-
-	_, err := helper.RetrieveData(filter, string(constants.Proposals), &proposals)
-	if err != nil {
-		return output.GetError(c, fiber.StatusInternalServerError, err.Error())
-	}
-
-	return output.GetSuccess(c, string(constants.SuccessGetMessage), fiber.Map{
-		"proposals": proposals,
-	})
-
-}
