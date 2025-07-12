@@ -22,7 +22,7 @@ func RegisterIdentity(c *fiber.Ctx) error {
 		return output.GetError(c, fiber.StatusBadRequest, err.Error())
 	}
 
-	res, err := helper.InsertData(c, string(constants.Identities), &identity)
+	res, err := helper.InsertData(string(constants.Identities), &identity)
 	if err != nil {
 		return output.GetError(c, fiber.StatusInternalServerError, err.Error())
 	}

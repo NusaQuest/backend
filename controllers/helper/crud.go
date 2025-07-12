@@ -6,7 +6,6 @@ import (
 
 	"github.com/NusaQuest/backend.git/config"
 	"github.com/NusaQuest/backend.git/utils"
-	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -44,7 +43,7 @@ func RetrieveData(filter bson.M, doc string, obj interface{}) (interface{}, erro
 // @param doc - The name of the MongoDB collection.
 // @param obj - The object to insert.
 // @return The result of the insert operation and an error if occurred.
-func InsertData(c *fiber.Ctx, doc string, obj interface{}) (*mongo.InsertOneResult, error) {
+func InsertData(doc string, obj interface{}) (*mongo.InsertOneResult, error) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -71,7 +70,7 @@ func InsertData(c *fiber.Ctx, doc string, obj interface{}) (*mongo.InsertOneResu
 // @param id - The ObjectID of the document to update.
 // @param obj - The object containing updated fields.
 // @return The result of the update operation and an error if occurred.
-func UpdateData(c *fiber.Ctx, doc string, key string, value interface{}, obj interface{}) (*mongo.UpdateResult, error) {
+func UpdateData(doc string, key string, value interface{}, obj interface{}) (*mongo.UpdateResult, error) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -81,6 +80,28 @@ func UpdateData(c *fiber.Ctx, doc string, key string, value interface{}, obj int
 	update := bson.M{"$set": obj}
 
 	res, err := collection.UpdateOne(ctx, filter, update)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+
+}
+
+// @notice Delete a document from a MongoDB collection.
+// @param doc The name of the MongoDB collection.
+// @param key The field name to filter the document.
+// @param value The value of the field to match the document.
+// @return The result of the delete operation, or an error if it fails.
+func DeleteData(doc string, key string, value interface{}) (*mongo.DeleteResult, error) {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	collection := config.GetDatabase().Collection(doc)
+	filter := bson.M{key: value}
+
+	res, err := collection.DeleteOne(ctx, filter)
 	if err != nil {
 		return nil, err
 	}

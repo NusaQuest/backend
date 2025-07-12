@@ -33,7 +33,7 @@ func AddProposal(c *fiber.Ctx) error {
 		return output.GetError(c, fiber.StatusBadRequest, string(constants.ProposalValidationFailed))
 	}
 
-	res, err := helper.InsertData(c, string(constants.Proposals), &proposal)
+	res, err := helper.InsertData(string(constants.Proposals), &proposal)
 	if err != nil {
 		return output.GetError(c, fiber.StatusInternalServerError, err.Error())
 	}
@@ -74,12 +74,34 @@ func UpdateProposal(c *fiber.Ctx) error {
 		return output.GetError(c, fiber.StatusBadRequest, string(constants.ProposalValidationFailed))
 	}
 
-	_, err = helper.UpdateData(c, string(constants.Proposals), "_id", objId, &proposal)
+	_, err = helper.UpdateData(string(constants.Proposals), "_id", objId, &proposal)
 	if err != nil {
 		return output.GetError(c, fiber.StatusInternalServerError, err.Error())
 	}
 
 	return output.GetSuccess(c, string(constants.SuccessUpdateMessage), fiber.Map{})
+
+}
+
+// DeleteProposal handles DELETE /api/proposals/:id
+// @notice Deletes a proposal based on the provided ID.
+// @param id The ObjectID of the proposal to be deleted (from URL path).
+// @return JSON response indicating success or failure of the deletion.
+func DeleteProposal(c *fiber.Ctx) error {
+
+	id := c.Params("id")
+
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return output.GetError(c, fiber.StatusBadRequest, err.Error())
+	}
+
+	_, err = helper.DeleteData(string(constants.Proposals), "_id", objId)
+	if err != nil {
+		return output.GetError(c, fiber.StatusBadRequest, err.Error())
+	}
+
+	return output.GetSuccess(c, string(constants.SuccessDeleteMessage), fiber.Map{})
 
 }
 

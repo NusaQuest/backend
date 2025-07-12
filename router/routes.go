@@ -32,6 +32,9 @@ func SetUp(app *fiber.App) {
 	// @notice Update an existing proposal by ID
 	app.Patch("/api/proposals/:id", controllers.UpdateProposal)
 
+	// @notice Delete an existing proposal by ID
+	app.Delete("/api/proposals/:id", controllers.DeleteProposal)
+
 	// @notice Get all proposals
 	app.Get("/api/proposals", controllers.GetProposals)
 

@@ -23,7 +23,7 @@ func AddNFT(c *fiber.Ctx) error {
 		return output.GetError(c, fiber.StatusBadRequest, err.Error())
 	}
 
-	res, err := helper.InsertData(c, string(constants.NFTs), &nft)
+	res, err := helper.InsertData(string(constants.NFTs), &nft)
 	if err != nil {
 		return output.GetError(c, fiber.StatusInternalServerError, err.Error())
 	}
@@ -57,7 +57,7 @@ func PurchaseNFT(c *fiber.Ctx) error {
 	nfts[0].Purchased += 1
 	nfts[0].Stock -= 1
 
-	_, err = helper.UpdateData(c, string(constants.NFTs), "_id", objId, &nfts[0])
+	_, err = helper.UpdateData(string(constants.NFTs), "_id", objId, &nfts[0])
 	if err != nil {
 		return output.GetError(c, fiber.StatusInternalServerError, err.Error())
 	}
