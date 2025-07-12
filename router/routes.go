@@ -29,14 +29,14 @@ func SetUp(app *fiber.App) {
 	// @notice Add a new proposal entry
 	app.Post("/api/proposals", controllers.AddProposal)
 
-	// @notice Update an existing proposal by ID
-	app.Patch("/api/proposals/:id", controllers.UpdateProposal)
-
 	// @notice Delete an existing proposal by ID
 	app.Delete("/api/proposals/:id", controllers.DeleteProposal)
 
 	// @notice Get all proposals
 	app.Get("/api/proposals", controllers.GetProposals)
+
+	// @notice Check proposal validity using OpenAI
+	app.Post("/api/proposals/check", controllers.CheckProposal)
 
 	// @notice Add a new nft entry
 	app.Post("/api/nfts", controllers.AddNFT)

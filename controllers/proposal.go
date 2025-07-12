@@ -1,11 +1,18 @@
 package controllers
 
 import (
+	"context"
+	"fmt"
+	"os"
+	"strconv"
+
 	"github.com/NusaQuest/backend.git/constants"
 	"github.com/NusaQuest/backend.git/controllers/helper"
 	"github.com/NusaQuest/backend.git/models"
 	"github.com/NusaQuest/backend.git/output"
 	"github.com/gofiber/fiber/v2"
+	"github.com/openai/openai-go"
+	"github.com/openai/openai-go/option"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -24,15 +31,6 @@ func AddProposal(c *fiber.Ctx) error {
 		return output.GetError(c, fiber.StatusBadRequest, err.Error())
 	}
 
-	valid, err := helper.CheckProposalInput(proposal.ProposalName, proposal.ProposalDescription, proposal.BeachName, proposal.City, proposal.Province)
-	if err != nil {
-		return output.GetError(c, fiber.StatusBadRequest, err.Error())
-	}
-
-	if !valid {
-		return output.GetError(c, fiber.StatusBadRequest, string(constants.ProposalValidationFailed))
-	}
-
 	res, err := helper.InsertData(string(constants.Proposals), &proposal)
 	if err != nil {
 		return output.GetError(c, fiber.StatusInternalServerError, err.Error())
@@ -44,42 +42,63 @@ func AddProposal(c *fiber.Ctx) error {
 
 }
 
-// UpdateProposal handles PUT/PATCH api/proposals/:id
-// @notice Updates an existing proposal by its ID with AI-based validation..
-// @dev Parses request body, uses OpenAI to validate location and description context, updates if valid.
-// @param c Fiber context with the proposal ID and body.
-// @return JSON response with update result or error.
-func UpdateProposal(c *fiber.Ctx) error {
-
-	id := c.Params("id")
-
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return output.GetError(c, fiber.StatusBadRequest, err.Error())
-	}
+// CheckProposalInput handles POST api/proposals/check
+// @notice Validates a beach cleanup proposal using OpenAI's language model.
+// @dev Ensures that the provided beach location exists in Indonesia and that the proposal specifically describes a beach cleanup activity.
+// @param c Fiber context containing the proposal data in the request body.
+// @return JSON response indicating whether the input is valid, or returns an error message if validation fails or input is unclear.
+func CheckProposal(c *fiber.Ctx) error {
 
 	var proposal models.Proposal
 
-	err = c.BodyParser(&proposal)
+	err := c.BodyParser(&proposal)
 	if err != nil {
 		return output.GetError(c, fiber.StatusBadRequest, err.Error())
 	}
 
-	valid, err := helper.CheckProposalInput(proposal.ProposalName, proposal.ProposalDescription, proposal.BeachName, proposal.City, proposal.Province)
-	if err != nil {
-		return output.GetError(c, fiber.StatusBadRequest, err.Error())
-	}
+	question := fmt.Sprintf(`
+		You are validating a beach cleanup proposal in Indonesia. Analyze the following:
 
-	if !valid {
-		return output.GetError(c, fiber.StatusBadRequest, string(constants.ProposalValidationFailed))
-	}
+			- Claimed beach: "%s"
+			- City: "%s"
+			- Province: "%s"
+			- Proposal Name: "%s"
+			- Description: "%s"
 
-	_, err = helper.UpdateData(string(constants.Proposals), "_id", objId, &proposal)
+		Determine if BOTH conditions are met:
+			1. The location refers to a real beach in Indonesia (not mountains or non-coastal areas).
+			2. The proposal clearly describes a beach cleanup (not forest, mountain, or general environmental action).
+
+		If BOTH are clearly true, reply only: true  
+		If either one is false or unclear, reply only: false  
+
+		⚠️ Reply with only: true or false — no explanations or extra words.
+		`, proposal.BeachName, proposal.City, proposal.Province, proposal.ProposalName, proposal.ProposalDescription)
+
+	OPENAI_API_KEY := os.Getenv("OPENAI_API_KEY")
+
+	client := openai.NewClient(option.WithAPIKey(OPENAI_API_KEY))
+
+	chatCompletion, err := client.Chat.Completions.New(context.TODO(), openai.ChatCompletionNewParams{
+		Messages: []openai.ChatCompletionMessageParamUnion{
+			openai.UserMessage(question),
+		},
+		Model: openai.ChatModelGPT3_5Turbo,
+	})
 	if err != nil {
 		return output.GetError(c, fiber.StatusInternalServerError, err.Error())
 	}
 
-	return output.GetSuccess(c, string(constants.SuccessUpdateMessage), fiber.Map{})
+	boolean, err := strconv.ParseBool(chatCompletion.Choices[0].Message.Content)
+	if err != nil {
+		return output.GetError(c, fiber.StatusInternalServerError, err.Error())
+	}
+
+	if !boolean {
+		return output.GetError(c, fiber.StatusBadRequest, string(constants.ProposalValidationFailed))
+	}
+
+	return output.GetSuccess(c, string(constants.SuccessGetMessage), fiber.Map{})
 
 }
 
