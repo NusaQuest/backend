@@ -9,7 +9,7 @@ type NFT struct {
 	Id primitive.ObjectID `json:"id" bson:"_id,omitempty"`
 
 	// @notice Smart contract ID or on-chain identifier of the NFT
-	ScId int64 `json:"scId" validate:"required"`
+	ScId int64 `json:"scid" validate:"required"`
 
 	// @notice Display name of the NFT
 	Name string `json:"name" validate:"required"`
