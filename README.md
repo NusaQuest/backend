@@ -27,6 +27,60 @@
     │   └── main.go         # Entry point of the backend application
     ```
 
+## 🧭 How to Run
+
+This project uses [GoFiber](https://gofiber.io/) and a custom `Makefile` for a smoother development experience.  
+Just run `make <task>` without remembering long commands!
+
+### 📦 1. Install Golang
+
+#### 📥 Download & Install
+
+Follow the official installation guide based on your OS:
+🔗 https://go.dev/doc/install
+
+#### ✅ Verify Installation
+
+After installation, run the following command to confirm:
+
+```bash
+go version
+```
+
+### 📁 2. Clone Repository
+
+```bash
+> git clone https://github.com/NusaQuest/backend
+> cd backend
+```
+
+### 📚 3. Install Dependencies
+
+```bash
+> make install
+```
+
+### 🧪 4. Run the Server
+
+```bash
+> make run
+```
+
+## 🔐 .env Configuration
+
+Before running deploy or verification commands, make sure your `.env` file is properly set up in the root directory.
+
+```env
+# 📦 MongoDB connection URI
+MONGO_URI=mongodb+srv://your_user:your_pass@cluster.mongodb.net/
+
+# 🗂️ Name of the database
+DB_NAME=<DB_NAME>
+
+# 🤖 OpenAI API key (for AI features)
+OPENAI_API_KEY=sk-...
+```
+
 ## 🤝 Contributors
 
 - 🧑 Yobel Nathaniel Filipus :
