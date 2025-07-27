@@ -11,9 +11,6 @@ const (
 	// @notice The MongoDB collection name for storing transaction data.
 	Transactions Document = "transactions"
 
-	// @notice The MongoDB collection name for storing identity data.
-	Identities Document = "identities"
-
 	// @notice The MongoDB collection name for storing nft data.
 	NFTs Document = "nfts"
 )

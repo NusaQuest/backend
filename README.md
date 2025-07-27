@@ -26,3 +26,10 @@
     │   ├── go.sum          # Hashes of module dependencies for reproducibility
     │   └── main.go         # Entry point of the backend application
     ```
+
+## 🤝 Contributors
+
+- 🧑 Yobel Nathaniel Filipus :
+  - 🐙 Github : [View Profile](https://github.com/yebology)
+  - 💼 Linkedin : [View Profile](https://linkedin.com/in/yobelnathanielfilipus)
+  - 📧 Email : [yobelnathaniel12@gmail.com](mailto:yobelnathaniel12@gmail.com)
