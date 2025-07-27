@@ -60,7 +60,7 @@ go version
 > make install
 ```
 
-### 🧪 4. Run the Server
+### 🧪 4. Run the Server Locally
 
 ```bash
 > make run
