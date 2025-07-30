@@ -43,8 +43,8 @@ func AddProposal(c *fiber.Ctx) error {
 }
 
 // CheckProposalInput handles POST api/proposals/check
-// @notice Validates a beach cleanup proposal using OpenAI's language model.
-// @dev Ensures that the provided beach location exists in Indonesia and that the proposal specifically describes a beach cleanup activity.
+// @notice Validates a river cleanup proposal using OpenAI's language model.
+// @dev Ensures that the provided river location exists in Indonesia and that the proposal specifically describes a river cleanup activity.
 // @param c Fiber context containing the proposal data in the request body.
 // @return JSON response indicating whether the input is valid, or returns an error message if validation fails or input is unclear.
 func CheckProposal(c *fiber.Ctx) error {
@@ -57,23 +57,23 @@ func CheckProposal(c *fiber.Ctx) error {
 	}
 
 	question := fmt.Sprintf(`
-		You are validating a beach cleanup proposal in Indonesia. Analyze the following:
+		You are validating a river cleanup proposal in Indonesia. Analyze the following:
 
-			- Claimed beach: "%s"
+			- Claimed river: "%s"
 			- City: "%s"
 			- Province: "%s"
 			- Proposal Name: "%s"
 			- Description: "%s"
 
 		Determine if BOTH conditions are met:
-			1. The location refers to a real beach in Indonesia (not mountains or non-coastal areas).
-			2. The proposal clearly describes a beach cleanup (not forest, mountain, or general environmental action).
+			1. The location refers to a real river in Indonesia (not mountains or non-coastal areas).
+			2. The proposal clearly describes a river cleanup (not forest, mountain, or general environmental action).
 
 		If BOTH are clearly true, reply only: true  
 		If either one is false or unclear, reply only: false  
 
 		⚠️ Reply with only: true or false — no explanations or extra words.
-		`, proposal.BeachName, proposal.City, proposal.Province, proposal.ProposalName, proposal.ProposalDescription)
+		`, proposal.RiverName, proposal.City, proposal.Province, proposal.ProposalName, proposal.ProposalDescription)
 
 	OPENAI_API_KEY := os.Getenv("OPENAI_API_KEY")
 
